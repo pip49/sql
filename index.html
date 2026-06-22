@@ -66,6 +66,7 @@
             cursor: pointer;
             color: #666;
             transition: all 0.3s ease;
+            outline: none;
         }
 
         .tab-btn.active {
@@ -124,21 +125,6 @@
             white-space: pre-line;
         }
 
-        .highlight {
-            background-color: #fff2cc;
-            font-weight: bold;
-            padding: 0 2px;
-        }
-
-        code {
-            background-color: #f1f2f6;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9em;
-            color: #c0392b;
-        }
-
         footer {
             text-align: center;
             padding: 2rem;
@@ -167,22 +153,16 @@
 
 <div class="container">
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="openTab('subject1')">1과목: 데이터 모델링의 이해 (1~20)</button>
-        <button class="tab-btn" onclick="openTab('subject2')">2과목: SQL 기본 및 활용 (21~100)</button>
+        <button class="tab-btn active" onclick="openTab(event, 'subject1', this)">1과목: 데이터 모델링의 이해 (1~20)</button>
+        <button class="tab-btn" onclick="openTab(event, 'subject2', this)">2과목: SQL 기본 및 활용 (21~100)</button>
     </div>
 
-    <!-- 1과목 -->
     <div id="subject1" class="section-content active">
-        <div class="card-grid">
-            <!-- 1-20 아이템들 자동 생성 구조 -->
-        </div>
+        <div class="card-grid"></div>
     </div>
 
-    <!-- 2과목 -->
     <div id="subject2" class="section-content">
-        <div class="card-grid">
-            <!-- 21-100 아이템들 자동 생성 구조 -->
-        </div>
+        <div class="card-grid"></div>
     </div>
 </div>
 
@@ -204,8 +184,7 @@
         { num: 9, title: "속성의 분류", desc: "기본 속성(업무 도출) / 설계 속성(새로 규칙을 정의, 예: 코드) / 파생 속성(타 속성에 의해 계산됨, 정밀성 요함)" },
         { num: 10, title: "도메인 (Domain)", desc: "속성이 가질 수 있는 값의 범위와 데이터 타입 (예: 성별 속성의 도메인은 'M', 'F')." },
         { num: 11, title: "관계의 표기법", desc: "관계명(Membership), 관계차수(Cardinality: 1:1, 1:M, M:N), 관계선택성(Optionality: 필수, 선택)" },
-        { num: 12, title: "식별 관계 vs 비식별 관계", desc: "식별 관계: 부모의 주식별자가 자식의 주식별자로 상속 (실선 표기)
-비식별 관계: 부모의 주식별자가 자식의 일반 속성으로 상속 (점선 표기, 관계 약화)" },
+        { num: 12, title: "식별 관계 vs 비식별 관계", desc: "식별 관계: 부모의 주식별자가 자식의 주식별자로 상속 (실선 표기)\n비식별 관계: 부모의 주식별자가 자식의 일반 속성으로 상속 (점선 표기, 관계 약화)" },
         { num: 13, title: "주식별자의 4대 특징", desc: "유일성(인스턴스 구분), 최소성(최소 한의 속성 구성), 불변성(값 변경 불가), 존재성(Not Null)" },
         { num: 14, title: "대표성 여부에 따른 분류", desc: "주식별자(대표성 O) / 보조식별자(대표성 X, 참조 관계 연결 불가)" },
         { num: 15, title: "생성 여부에 따른 분류", desc: "내부 식별자(스스로 생성) / 외부 식별자(타 엔터티 참조, FK)" },
@@ -216,31 +195,23 @@
         { num: 20, title: "3정규형(3NF)", desc: "이행적 함수 종속성 제거 (A -> B, B -> C 일 때 A -> C 관계 성립하는 일반 속성 분리)." },
 
         // 2과목
-        { num: 21, title: "SQL 종류", desc: "DDL(정의어): CREATE, ALTER, DROP, TRUNCATE (자동 커밋됨)
-DML(조작어): SELECT, INSERT, UPDATE, DELETE (트랜잭션 관리 필요)
-DCL(제어어): GRANT, REVOKE
-TCL(트랜잭션 제어): COMMIT, ROLLBACK, SAVEPOINT" },
+        { num: 21, title: "SQL 종류", desc: "DDL(정의어): CREATE, ALTER, DROP, TRUNCATE (자동 커밋됨)\nDML(조작어): SELECT, INSERT, UPDATE, DELETE (트랜잭션 관리 필요)\nDCL(제어어): GRANT, REVOKE\nTCL(트랜잭션 제어): COMMIT, ROLLBACK, SAVEPOINT" },
         { num: 22, title: "테이블 구조", desc: "가로 = 행(Row), 인스턴스(Instance), 튜플(Tuple) / 세로 = 열(Column), 속성(Attribute)" },
         { num: 23, title: "참조 무결성 제약조건", desc: "외래키(FK) 값은 부모 테이블의 기본키(PK)에 존재하거나 NULL이어야 함." },
-        { num: 24, title: "DROP vs TRUNCATE vs DELETE", desc: "DROP: 테이블 구조와 데이터 모두 삭제 (용량 반환)
-TRUNCATE: 데이터만 전체 삭제, 구조 유지 (용량 반환, Rollback 불가)
-DELETE: 조건별 데이터 삭제 (용량 반환 안 됨, Rollback 가능)" },
+        { num: 24, title: "DROP vs TRUNCATE vs DELETE", desc: "DROP: 테이블 구조와 데이터 모두 삭제 (용량 반환)\nTRUNCATE: 데이터만 전체 삭제, 구조 유지 (용량 반환, Rollback 불가)\nDELETE: 조건별 데이터 삭제 (용량 반환 안 됨, Rollback 가능)" },
         { num: 25, title: "NULL 정의", desc: "0도 아니고 공백도 아님. '알 수 없는 값(Unknown)' 또는 '부재(Missing)'를 의미." },
         { num: 26, title: "NULL의 연산 규칙", desc: "NULL과의 모든 사칙연산 결과는 NULL. NULL과의 비교 연산은 False/Unknown." },
         { num: 27, title: "연산자 우선순위", desc: "괄호 () → NOT → COMPARISON(=, >, <) → AND → OR" },
         { num: 28, title: "BETWEEN a AND b", desc: "a 이상 b 이하 (시작값과 끝값 포함)." },
         { num: 29, title: "IN (list)", desc: "리스트 내부의 값 중 하나라도 일치하면 참 (OR 조건과 동일)." },
         { num: 30, title: "LIKE 문자열 비교", desc: "%(0개 이상의 모든 문자), _(정확히 1개의 모든 문자)." },
-        { num: 31, title: "ESCAPE", desc: "LIKE 연산에서 %나 _ 자체를 문자로 조회하고 싶을 때 사용 (예: WHERE col LIKE '%\_%' ESCAPE '\')" },
+        { num: 31, title: "ESCAPE", desc: "LIKE 연산에서 %나 _ 자체를 문자로 조회하고 싶을 때 사용 (예: WHERE col LIKE '%\\_%' ESCAPE '\\')" },
         { num: 32, title: "IS NULL / IS NOT NULL", desc: "NULL 값 비교는 반드시 이 연산자를 사용해야 함 (= NULL은 틀림)." },
         { num: 33, title: "문자열 함수", desc: "LOWER, UPPER, LENGTH, CONCAT, SUBSTR(문자열 추출), INSTR(문자 위치 탐색), TRIM(공백 제거)." },
         { num: 34, title: "숫자 함수", desc: "ROUND(반올림), TRUNC(버림), MOD(나머지), CEIL(올림), FLOOR(내림)." },
         { num: 35, title: "날짜 함수", desc: "Oracle의 SYSDATE, SQL Server의 GETDATE(). 날짜 + 1 = 1일 더하기." },
         { num: 36, title: "변환 함수", desc: "TO_CHAR(문자변환), TO_NUMBER(숫자변환), TO_DATE(날짜변환)." },
-        { num: 37, title: "일반 NULL 관련 함수", desc: "NVL(A, B) / ISNULL(A, B): A가 NULL이면 B를 반환.
-NVL2(A, B, C): A가 NULL이 아니면 B, NULL이면 C를 반환.
-NULLIF(A, B): A와 B가 같으면 NULL, 다르면 A를 반환.
-COALESCE(A, B, C, ...): NULL이 아닌 최초의 값을 반환." },
+        { num: 37, title: "일반 NULL 관련 함수", desc: "NVL(A, B) / ISNULL(A, B): A가 NULL이면 B를 반환.\nNVL2(A, B, C): A가 NULL이 아니면 B, NULL이면 C를 반환.\nNULLIF(A, B): A와 B가 같으면 NULL, 다르면 A를 반환.\nCOALESCE(A, B, C, ...): NULL이 아닌 최초의 값을 반환." },
         { num: 38, title: "CASE 문", desc: "CASE WHEN 조건 THEN 결과 ELSE 결과 END (ELSE 생략 시 조건 불일치하면 NULL 반환)." },
         { num: 39, title: "집계 함수의 특징", desc: "NULL 값을 제외하고 계산함. (단, COUNT(*)는 NULL 포함 전체 행 계산)." },
         { num: 40, title: "GROUP BY 규칙", desc: "GROUP BY 절에 명시되지 않은 일반 컬럼은 SELECT 절에 단독으로 올 수 없고, 반드시 집계 함수와 함께 쓰여야 함." },
@@ -284,8 +255,7 @@ COALESCE(A, B, C, ...): NULL이 아닌 최초의 값을 반환." },
         { num: 78, title: "ROWNUM (Oracle)", desc: "조회된 결과에 임시로 부여되는 행 번호. WHERE ROWNUM <= 3은 가능하나, WHERE ROWNUM = 2는 불가능 (반드시 1을 포함해야 함)." },
         { num: 79, title: "TOP (SQL Server)", desc: "SELECT TOP 3 col1 FROM table 형태로 상위 N개 출력. WITH TIES를 쓰면 동점자도 포함." },
         { num: 80, title: "계층형 질의 문법", desc: "START WITH(시작 조건) → CONNECT BY(전개 조건) 형태로 계층 구조 표현." },
-        { num: 81, title: "PRIOR 위치에 따른 전개", desc: "CONNECT BY PRIOR 자식 = 부모 -> 순방향 전개 (부모에서 자식)
-CONNECT BY PRIOR 부모 = 자식 -> 역방향 전개 (자식에서 부모)" },
+        { num: 81, title: "PRIOR 위치에 따른 전개", desc: "CONNECT BY PRIOR 자식 = 부모 -> 순방향 전개 (부모에서 자식)\nCONNECT BY PRIOR 부모 = 자식 -> 역방향 전개 (자식에서 부모)" },
         { num: 82, title: "계층형 가상 컬럼", desc: "LEVEL(루트 노드는 1, 하위로 갈수록 1씩 증가), CONNECT_BY_ISLEAF(리프 노드면 1, 아니면 0)." },
         { num: 83, title: "트랜잭션의 4대 특징(ACID)", desc: "원자성(All or Nothing), 일관성(모순 없음), 고립성/격리성(상호 영향 없음), 영속성(영구 저장)." },
         { num: 84, title: "COMMIT", desc: "변경된 내용을 메모리 버퍼에서 디스크에 최종 반영하고 트랜잭션을 종료함. Lock이 해제됨." },
@@ -294,8 +264,7 @@ CONNECT BY PRIOR 부모 = 자식 -> 역방향 전개 (자식에서 부모)" },
         { num: 87, title: "GRANT / REVOKE", desc: "권한 부여(GRANT 권한 TO 사용자), 권한 회수(REVOKE 권한 FROM 사용자)." },
         { num: 88, title: "CASCADE CONSTRAINTS", desc: "부모 테이블의 권한이나 제약조건을 삭제할 때 연관된 자식 제약조건도 함께 삭제하는 옵션." },
         { num: 89, title: "PL/SQL 구조", desc: "DECLARE(선언부) → BEGIN(실행부) → EXCEPTION(예외처리부) → END;" },
-        { num: 90, title: "프로시저 vs 사용자 정의 함수", desc: "프로시저: 리턴값이 없거나 여러 개 가능(OUT 변수), EXECUTE 명령어로 실행.
-함수: 반드시 1개의 리턴값을 가짐, SELECT문 등에 포함되어 실행 가능." },
+        { num: 90, title: "프로시저 vs 사용자 정의 함수", desc: "프로시저: 리턴값이 없거나 여러 개 가능(OUT 변수), EXECUTE 명령어로 실행.\n함수: 반드시 1개의 리턴값을 가짐, SELECT문 등에 포함되어 실행 가능." },
         { num: 91, title: "트리거 (Trigger)", desc: "특정 테이블에 DML문이 실행될 때 자동으로 실행되는 절차형 SQL (내부에 COMMIT, ROLLBACK 사용 불가)." },
         { num: 92, title: "옵티마이저 (Optimizer)", desc: "SQL을 어떻게 실행할지 최적의 실행 계획을 수립하는 주체 (규칙기반 RBO / 비용기반 CBO)." },
         { num: 93, title: "실행 계획 (Execution Plan)", desc: "옵티마이저가 수립한 SQL 실행 절차와 방법. 위에서 아래로, 안에서 밖으로 읽음." },
@@ -331,12 +300,19 @@ CONNECT BY PRIOR 부모 = 자식 -> 역방향 전개 (자식에서 부모)" },
         });
     }
 
-    function openTab(tabId) {
-        document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    // 함수 매개변수를 브라우저 표준에 맞게 보완했습니다.
+    function openTab(evt, tabId, element) {
+        // 모든 탭 컨텐츠 숨기기
+        const contents = document.querySelectorAll('.section-content');
+        contents.forEach(el => el.classList.remove('active'));
 
+        // 모든 버튼 비활성화
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(el => el.classList.remove('active'));
+
+        // 선택한 탭과 버튼 활성화
         document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
+        element.classList.add('active');
     }
 
     // 초기 렌더링
